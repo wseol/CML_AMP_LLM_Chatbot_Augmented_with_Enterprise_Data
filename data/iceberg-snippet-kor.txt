@@ -1,0 +1,1 @@
+Apache Iceberg는 거대한 분석 데이터 세트를 위한 개방형 테이블 형식입니다. Iceberg는 SQL 테이블처럼 작동하는 고성능 테이블 형식을 사용하여 Spark, Trino, PrestoDB, Flink, Hive 및 Impala를 포함한 컴퓨팅 엔진에 테이블을 추가합니다.

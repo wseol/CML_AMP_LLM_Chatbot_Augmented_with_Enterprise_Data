@@ -21,8 +21,9 @@ def get_embeddings(sentence):
     # Default model will truncate the document and only gets embeddings of the first 256 tokens.
     # Semantic search will only be effective on these first 256 tokens.
     # Context loading in 4_app context will still include the ENTIRE document file
-    encoded_input = tokenizer(sentences, padding='max_length', truncation=True, return_tensors='pt')
-
+#    encoded_input = tokenizer(sentences, padding='max_length', truncation=True, return_tensors='pt')
+    encoded_input = tokenizer(sentences, padding='max_length', max_length=256, truncation=True, return_tensors='pt')
+  
     # Compute token embeddings
     with torch.no_grad():
         model_output = model(**encoded_input)

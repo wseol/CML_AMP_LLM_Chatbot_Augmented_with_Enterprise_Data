@@ -7,8 +7,12 @@ import utils.model_llm_utils as model_llm
 import utils.vector_db_utils as vector_db
 import utils.model_embedding_utils as model_embedding
 
+import torch, gc
 
 def main():
+    gc.collect()
+    torch.cuda.empty_cache()
+    
     # Configure gradio QA app 
     print("Configuring gradio app")
     demo = gradio.Interface(fn=get_responses, 
@@ -85,15 +89,19 @@ def load_context_chunk_from_data(id_path):
         return f.read()
       
 def create_enhanced_prompt(context, question):
-    prompt_template = """<human>:%s. Answer this question based on given context %s
-<bot>:"""
-    prompt = prompt_template % (context, question)
+#    prompt_template = """<human>:%s. Answer this question based on given context %s
+#<bot>:"""
+#    prompt = prompt_template % (context, question)
+    prompt_template = """아래는 작업을 설명하는 명령어와 추가 컨텍스트를 제공하는 입력이 짝을 이루는 예제입니다. 요청을 적절히 완료하는 응답을 작성하세요.\n\n### 명령어:\n%s\n\n### 입력:\n%s\n\n### 응답:\n"""
+
+    prompt = prompt_template % (question, context)
     return prompt
   
 # Pass through user input to LLM model with enhanced prompt and stop tokens
 def get_llm_response(prompt):
-    stop_words = ['<human>:', '\n<bot>:']
-
+#    stop_words = ['<human>:', '\n<bot>:']
+    stop_words = ['명령어:', '입력:', '응답:']
+    
     generated_text = model_llm.get_llm_generation(prompt,
                                                   stop_words,
                                                   max_new_tokens=256,
